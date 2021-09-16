@@ -1,3 +1,1 @@
-# votesmart first
-# votesmart
 # votesmart
