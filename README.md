@@ -1,6 +1,7 @@
-Смарт-контракт для Умного Голосования на блокчейне NEAR
+Смарт-контракт для Умного Голосования на блокчейне NEAR. 
+[Подробнее о проблеме и решении](https://hackmd.io/Xeu0dp7iSv-I4hsvWbqRXw?view).
 
-Веб-версия на [IPFS](https://ipfs.infura.io/ipfs/QmeBP14Z9vCqUimsWDy6jUCRei5aRUA47o8jbCJkE3gHuT)
+Демонстрационный [интерфейс на IPFS](https://ipfs.infura.io/ipfs/QmeBP14Z9vCqUimsWDy6jUCRei5aRUA47o8jbCJkE3gHuT).
 
 Использование c помощью консоли:
 
