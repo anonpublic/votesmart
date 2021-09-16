@@ -1,0 +1,108 @@
+<html>
+<head>
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+	<script type="text/javascript">
+
+	function load(method, params, callback){		
+		// REST API https://github.com/near-examples/near-api-rest-server
+		var url = "https://rest.nearapi.org/view";
+
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", url);
+
+		xhr.setRequestHeader("Accept", "application/json");
+		xhr.setRequestHeader("Content-Type", "application/json");
+
+		xhr.onreadystatechange = function () {
+		   if (xhr.readyState === 4) {
+		      callback(JSON.parse(xhr.responseText));
+		   }};
+
+		var data = `{
+		  "contract": "votesmart.near",
+		  "method": "${method}",
+		  "params": ${JSON.stringify(params)},
+		  "rpc_node": "https://rpc.mainnet.near.org"
+		}`;
+
+		xhr.send(data);
+	}
+
+
+	function showRegions (data) {
+		var list = document.createElement("ul");
+		data.forEach(function(item) {
+		 	var elem = document.createElement("li");
+		 	var anchor = document.createElement("a");
+				anchor.href = `#`;
+				anchor.onclick = function () {
+					scroll_top();
+					document.getElementById("selected-region").innerHTML = item[1].title;
+					load('get_districts_by_region', {"region_id": item[0]}, showDistricts); 
+					return false;
+				};
+				anchor.innerText = item[1].title;
+		 	elem.appendChild(anchor);
+				list.appendChild(elem);
+		 });
+		document.getElementById("districs").innerHTML = '<h3>Области</h3>';
+		document.getElementById("districs").appendChild(list);
+	}	
+
+	function showDistricts (data) {
+		var list = document.createElement("ul");
+		data.forEach(function(item) {
+		 	var elem = document.createElement("li");
+		 	var anchor = document.createElement("a");
+				anchor.href = `#`;
+				anchor.onclick = function () {
+					scroll_top();
+					document.getElementById("selected-district").innerHTML = ">> " + item[1].title;
+					load('get_votesmart', {"campaign_id": 1, "district_id": item[0]}, showRecommendation); 
+					return false;
+				};
+				anchor.innerText = item[1].title;
+		 	elem.appendChild(anchor);
+				list.appendChild(elem);
+		 });			
+		document.getElementById("regions").innerHTML = '<h3>Районы</h3>';
+		document.getElementById("regions").appendChild(list);
+	}
+
+	function showRecommendation (data) {
+		document.getElementById("recommendation").innerHTML = `
+			<h3>Рекомендация Умного Голосования</h3>
+			<h1>${data.title}</h1>
+			<h2>${data.party}</h2>
+		`;
+	}
+
+	function scroll_top() {
+		window.scroll({
+			top: 0, 
+			left: 0, 
+			behavior: 'smooth' 
+		});
+	}
+
+	window.onload = function () {
+		load("get_regions", {}, showRegions);
+	};
+	</script>
+</head>
+
+<body>
+	<div>
+		<span id="selected-region"></span>
+		<span id="selected-district"></span>	
+	</div>
+	<div id="recommendation"></div>
+	<div id="regions"></div>
+	<div id="districs"></div>	
+	<div>
+		<span>
+			Умное голосование на блокчейне. <a href="https://github.com/anonpublic/votesmart">Open Source</a>.
+		</span>
+	</div>
+</body>
+</html>
